@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>El Becerro | Punto de Venta</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+
+    <!-- PANTALLA DE LOGIN / TECLADO PIN -->
+    <div id="pantalla-login" class="login-overlay">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo-box-login">
+                    <img src="imagen.jpg" alt="El Becerro" onerror="this.style.display='none'">
+                </div>
+                <h2>EL BECERRO</h2>
+                <p>Ingresa tu PIN de acceso</p>
+            </div>
+
+            <div class="pin-display">
+                <span id="pin-dots">••••</span>
+            </div>
+
+            <div class="teclado-pin">
+                <button class="btn-num" onclick="ingresarDigitoPin('1')">1</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('2')">2</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('3')">3</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('4')">4</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('5')">5</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('6')">6</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('7')">7</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('8')">8</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('9')">9</button>
+                <button class="btn-num btn-aux" onclick="borrarDigitoPin()">⌫</button>
+                <button class="btn-num" onclick="ingresarDigitoPin('0')">0</button>
+                <button class="btn-num btn-aux" onclick="limpiarPin()">C</button>
+            </div>
+
+            <div id="alerta-login-error" class="alerta-error oculto">
+                ⚠️ PIN incorrecto o usuario no autorizado.
+            </div>
+
+            <div class="info-licencia-dispositivo">
+                <small>ID Terminal: <strong id="lbl-device-id">Cargando...</strong></small>
+                <span id="badge-estado-licencia" class="licencia-valida">🟢 Licencia Activa</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE BLOQUEO POR LICENCIA -->
+    <div id="pantalla-bloqueo-licencia" class="login-overlay oculto">
+        <div class="login-card">
+            <div class="login-header">
+                <span style="font-size: 3rem;">⛔</span>
+                <h2>TERMINAL NO AUTORIZADA</h2>
+                <p>Este dispositivo no cuenta con una licencia activa.</p>
+            </div>
+            <div class="bloqueo-body">
+                <p>Proporciona el siguiente ID a tu proveedor para dar de alta esta terminal en tu plan:</p>
+                <div class="box-device-id" id="box-device-id-bloqueado">---</div>
+            </div>
+            <div class="login-footer">
+                <small>Soporte Técnico El Becerro</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENCABEZADO SUPERIOR -->
+    <header class="encabezado-pos">
+        <div class="marca-contenedor">
+            <div class="logo-box">
+                <img src="imagen.jpg" alt="El Becerro" class="logo-img" onerror="this.style.display='none'">
+            </div>
+            <div>
+                <h1>El Becerro</h1>
+                <span id="indicador-estado-ticket">Nueva Venta</span>
+            </div>
+        </div>
+
+        <div class="acciones-header">
+            <div class="usuario-badge">
+                👤 <span id="lbl-usuario-activo">Sesión: ---</span>
+            </div>
+            <button id="btn-tickets-abiertos" class="btn-header btn-tickets">
+                📋 TICKETS ABIERTOS <span id="badge-tickets" class="badge">0</span>
+            </button>
+            <button id="btn-cerrar-sesion" class="btn-header btn-salir" title="Cerrar Sesión">
+                🚪
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL POS -->
+    <main class="pos-layout">
+
+        <!-- SECCIÓN IZQUIERDA: CATÁLOGO DE PRODUCTOS -->
+        <section class="seccion-productos">
+            <div id="grid-productos" class="grid-productos"></div>
+        </section>
+
+        <!-- SECCIÓN DERECHA: TICKET / ORDEN ACTUAL -->
+        <aside class="seccion-ticket">
+            <div class="ticket-header">
+                <div class="ticket-titulo">
+                    <h2>Ticket Actual</h2>
+                    <div class="info-mesa-wrapper">
+                        <span id="info-mesa-actual">Venta Directa</span>
+                        <button id="btn-cambiar-mesa" class="btn-link-mesa oculto" title="Reasignar a otra mesa">🔄 Cambiar mesa</button>
+                    </div>
+                </div>
+                <button id="btn-limpiar-ticket" class="btn-icono" title="Limpiar orden">🗑️</button>
+            </div>
+
+            <div id="lista-ticket" class="lista-ticket">
+                <div class="ticket-vacio">
+                    <span class="icono-vacio">🛒</span>
+                    <p>No hay productos en la orden</p>
+                    <small>Toca un producto para agregarlo</small>
+                </div>
+            </div>
+
+            <div class="ticket-footer">
+                <div class="fila-total">
+                    <span>Total:</span>
+                    <strong id="total-orden">$0.00</strong>
+                </div>
+
+                <div class="acciones-ticket">
+                    <button id="btn-guardar-orden" class="btn-pos btn-guardar" disabled>💾 GUARDAR</button>
+                    <button id="btn-cobrar-directo" class="btn-pos btn-cobrar solo-master" disabled>💳 COBRAR</button>
+                </div>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- MODAL DE SELECCIÓN DE PESO, LITROS O PIEZAS -->
+    <div id="modal-modificador" class="modal-overlay oculto">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3 id="modal-prod-nombre">Producto</h3>
+                <button class="btn-cerrar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- VENTA POR GRAMOS / PESO / DINERO -->
+                <div id="seccion-peso-kilo" class="bloque-medida oculto">
+                    <div class="encabezado-medida">
+                        <span>⚖️ Venta por Peso ($<span id="precio-kilo-base">0</span>/Kg)</span>
+                        <strong id="precio-calculado-peso">$0.00</strong>
+                    </div>
+
+                    <div class="pills-medida">
+                        <button class="btn-medida-gramo" data-gramos="250">250g (1/4)</button>
+                        <button class="btn-medida-gramo" data-gramos="500">500g (1/2)</button>
+                        <button class="btn-medida-gramo" data-gramos="750">750g (3/4)</button>
+                        <button class="btn-medida-gramo activa" data-gramos="1000">1000g (1Kg)</button>
+                    </div>
+
+                    <div class="selector-modo-peso">
+                        <button id="btn-modo-gramos" class="btn-tab-modo activa">⚖️ Por Gramos</button>
+                        <button id="btn-modo-dinero" class="btn-tab-modo">💵 Por Dinero ($)</button>
+                    </div>
+
+                    <div class="campo-custom">
+                        <label id="label-input-peso" for="input-peso-custom">Gramos exactos:</label>
+                        <input type="number" id="input-peso-custom" placeholder="Ej. 350" min="1" step="any">
+                    </div>
+                </div>
+
+                <!-- VENTA POR LITROS / ML -->
+                <div id="seccion-volumen-litro" class="bloque-medida oculto">
+                    <div class="encabezado-medida">
+                        <span>🥛 Venta por Litro ($<span id="precio-litro-base">0</span>/L)</span>
+                        <strong id="precio-calculado-litro">$0.00</strong>
+                    </div>
+                    <div class="pills-medida">
+                        <button class="btn-medida-ml" data-ml="250">250ml (1/4 L)</button>
+                        <button class="btn-medida-ml" data-ml="500">500ml (1/2 L)</button>
+                        <button class="btn-medida-ml" data-ml="750">750ml (3/4 L)</button>
+                        <button class="btn-medida-ml activa" data-ml="1000">1000ml (1 L)</button>
+                    </div>
+                    <div class="campo-custom">
+                        <label for="input-ml-custom">Mililitros exactos:</label>
+                        <input type="number" id="input-ml-custom" placeholder="Ej. 600" min="50" step="50">
+                    </div>
+                </div>
+
+                <!-- COMPLEMENTOS POR SEPARADO -->
+                <p class="modal-label" id="label-ingredientes">Complementos:</p>
+                <div id="seccion-ingredientes" class="bloque-ingredientes">
+                    <div class="grupo-ingrediente">
+                        <label>🧅 Cebolla:</label>
+                        <div class="pills-ingrediente" id="pills-cebolla">
+                            <button class="btn-pill-opt activa" data-ing="cebolla" data-val="Con cebolla">Con cebolla</button>
+                            <button class="btn-pill-opt" data-ing="cebolla" data-val="Sin cebolla">Sin cebolla</button>
+                        </div>
+                    </div>
+                    <div class="grupo-ingrediente">
+                        <label>🌿 Cilantro:</label>
+                        <div class="pills-ingrediente" id="pills-cilantro">
+                            <button class="btn-pill-opt activa" data-ing="cilantro" data-val="Con cilantro">Con cilantro</button>
+                            <button class="btn-pill-opt" data-ing="cilantro" data-val="Sin cilantro">Sin cilantro</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="campo-comentario">
+                    <label for="comentario-cocina">Comentario a cocina (opcional):</label>
+                    <input type="text" id="comentario-cocina" placeholder="Ej. Bien caliente, salsa aparte...">
+                </div>
+
+                <div id="control-cantidad-piezas" class="control-cantidad-modal">
+                    <span>Cantidad (Piezas):</span>
+                    <div class="counter-box">
+                        <button id="btn-cant-menos" class="btn-counter">−</button>
+                        <span id="cant-modal">1</span>
+                        <button id="btn-cant-mas" class="btn-counter">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-confirmar-agregar" class="btn-pos btn-guardar">Agregar a la orden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GUARDAR MESA -->
+    <div id="modal-guardar-mesa" class="modal-overlay oculto">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3 id="titulo-modal-guardar">Guardar Ticket en Mesa</h3>
+                <button class="btn-cerrar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-label">Selecciona dónde asignar este consumo:</p>
+                <div id="grid-mesas-guardar" class="grid-mesas"></div>
+                <div class="separador">O</div>
+                <div class="campo-comentario">
+                    <label for="nombre-para-llevar">Para llevar / Identificador personalizado:</label>
+                    <input type="text" id="nombre-para-llevar" placeholder="Ej. Cliente Juan / Para llevar">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-confirmar-llevar" class="btn-pos btn-guardar">Guardar Identificador</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TICKETS ABIERTOS -->
+    <div id="modal-tickets-abiertos" class="modal-overlay oculto">
+        <div class="modal-contenido modal-ancho">
+            <div class="modal-header">
+                <h3>📋 Tickets Abiertos (Mesas Activas)</h3>
+                <button class="btn-cerrar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="lista-tickets-abiertos" class="lista-tickets-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VER RECIBO / PRE-CUENTA -->
+    <div id="modal-ver-recibo" class="modal-overlay oculto">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3>🧾 Pre-Cuenta / Recibo</h3>
+                <button class="btn-cerrar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="contenedor-recibo-impresion" class="ticket-impresion"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-imprimir-cuenta" class="btn-pos btn-guardar">🖨️ Imprimir Cuenta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COBRAR -->
+    <div id="modal-cobrar" class="modal-overlay oculto">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3>💳 Cobrar Cuenta</h3>
+                <button class="btn-cerrar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="monto-cobro-box">
+                    <span>Total a pagar:</span>
+                    <strong id="monto-total-cobro">$0.00</strong>
+                </div>
+
+                <div class="tipo-pago-tabs">
+                    <button class="tab-pago activa" data-metodo="efectivo">💵 Efectivo</button>
+                    <button class="tab-pago" data-metodo="tarjeta">💳 Tarjeta</button>
+                    <button class="tab-pago" data-metodo="transferencia">📲 Transferencia</button>
+                </div>
+
+                <div id="seccion-efectivo" class="seccion-metodo-pago">
+                    <label for="efectivo-recibido">Efectivo recibido:</label>
+                    <input type="number" id="efectivo-recibido" placeholder="0.00" class="input-monto" min="0" step="any">
+
+                    <div class="billetes-rapidos">
+                        <button class="btn-billete" data-monto="exacto">Exacto</button>
+                        <button class="btn-billete" data-monto="100">$100</button>
+                        <button class="btn-billete" data-monto="200">$200</button>
+                        <button class="btn-billete" data-monto="500">$500</button>
+                    </div>
+
+                    <div id="alerta-cobro-error" class="alerta-error oculto">
+                        ⚠️ El efectivo recibido debe ser igual o mayor al total.
+                    </div>
+
+                    <div class="resultado-cambio">
+                        <span>Cambio a entregar:</span>
+                        <strong id="monto-cambio">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-finalizar-venta" class="btn-pos btn-cobrar" disabled>✓ Finalizar y Cobrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

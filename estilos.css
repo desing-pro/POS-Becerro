@@ -1,0 +1,968 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #f4efe9;
+    color: #2d2926;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* OVERLAY LOGIN Y TECLADO NUMÉRICO */
+.login-overlay {
+    position: fixed;
+    inset: 0;
+    background: #3b0f0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 16px;
+}
+
+.login-card {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.login-header h2 {
+    color: #5b1717;
+    font-size: 18px;
+    margin-top: 8px;
+}
+
+.login-header p {
+    font-size: 12px;
+    color: #666;
+}
+
+.logo-box-login {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    background: #f4efe9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.logo-box-login img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pin-display {
+    background: #f4efe9;
+    border: 2px solid #5b1717;
+    border-radius: 10px;
+    width: 100%;
+    padding: 12px;
+    margin: 14px 0;
+    font-size: 28px;
+    letter-spacing: 12px;
+    color: #5b1717;
+    font-weight: bold;
+    min-height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.teclado-pin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-num {
+    background: #faf8f6;
+    border: 1px solid #dcd3cb;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    min-height: 52px;
+}
+
+.btn-num:active {
+    background: #5b1717;
+    color: #fff;
+}
+
+.btn-aux {
+    background: #eef2f5;
+    color: #555;
+}
+
+.info-licencia-dispositivo {
+    margin-top: 16px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: #777;
+}
+
+.licencia-valida {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.box-device-id {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 12px 0;
+    border: 1px dashed #aaa;
+}
+
+.usuario-badge {
+    background: #7a2323;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.btn-salir {
+    background: #c62828 !important;
+}
+
+/* ENCABEZADO POS */
+.encabezado-pos {
+    background: #5b1717;
+    color: #ffffff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 60px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.marca-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-box {
+    width: 40px;
+    height: 40px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.marca-contenedor h1 {
+    font-size: 18px;
+    line-height: 1.1;
+}
+
+.marca-contenedor span {
+    font-size: 11px;
+    background: #7a2323;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.acciones-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-header {
+    background: #2e7d32;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+}
+
+.badge {
+    background: #ffffff;
+    color: #2e7d32;
+    border-radius: 20px;
+    padding: 2px 8px;
+    font-size: 12px;
+}
+
+/* LAYOUT PRINCIPAL POS */
+.pos-layout {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+.seccion-productos {
+    flex: 1;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+}
+
+.grid-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.card-producto {
+    background: #ffffff;
+    border: 1px solid #e3dbd4;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.card-producto:active {
+    transform: scale(0.98);
+    background: #fdf5f5;
+}
+
+.icono-card {
+    font-size: 2rem;
+    margin-bottom: 4px;
+}
+
+.info-card h4 {
+    font-size: 14px;
+    color: #302824;
+    margin-bottom: 4px;
+}
+
+.card-producto .precio {
+    font-size: 15px;
+    font-weight: bold;
+    color: #5b1717;
+    margin-top: 6px;
+}
+
+.card-producto .etiqueta-medida {
+    font-size: 10px;
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* TICKET SECCIÓN DERECHA */
+.seccion-ticket {
+    width: 360px;
+    background: #ffffff;
+    border-left: 1px solid #e3dbd4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ticket-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee7e1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #faf8f6;
+}
+
+.ticket-titulo h2 {
+    font-size: 16px;
+}
+
+.info-mesa-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.info-mesa-wrapper span {
+    font-size: 12px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.btn-link-mesa {
+    background: none;
+    border: none;
+    color: #1976d2;
+    font-size: 11px;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-icono {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 6px;
+}
+
+.lista-ticket {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ticket-vacio {
+    text-align: center;
+    color: #999;
+    margin: auto 0;
+}
+
+.icono-vacio {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.item-ticket {
+    background: #faf8f6;
+    border: 1px solid #eee6df;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.item-info strong {
+    font-size: 13px;
+    display: block;
+}
+
+.item-info small {
+    font-size: 11px;
+    color: #666;
+    display: block;
+}
+
+.item-derecha {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.item-precio {
+    font-weight: bold;
+    color: #5b1717;
+    font-size: 14px;
+}
+
+.btn-eliminar-item {
+    color: #d32f2f;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 4px;
+    background: transparent;
+    border: none;
+}
+
+.ticket-footer {
+    padding: 14px;
+    border-top: 1px solid #eee7e1;
+    background: #faf8f6;
+}
+
+.fila-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.fila-total strong {
+    font-size: 24px;
+    color: #5b1717;
+}
+
+.acciones-ticket {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-pos {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-pos:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-guardar {
+    background: #1976d2;
+    color: #ffffff;
+}
+
+.btn-cobrar {
+    background: #2e7d32;
+    color: #ffffff;
+}
+
+/* COMPLEMENTOS */
+.bloque-ingredientes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+    background: #fdf5f5;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #f2d6d6;
+}
+
+.grupo-ingrediente {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.grupo-ingrediente label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #5b1717;
+}
+
+.pills-ingrediente {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-pill-opt {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    min-height: 36px;
+}
+
+.btn-pill-opt.activa {
+    background: #5b1717;
+    color: #ffffff;
+    border-color: #5b1717;
+    font-weight: bold;
+}
+
+/* MEDIDAS (PESO Y LITROS) */
+.bloque-medida {
+    background: #eef6ff;
+    border: 1px solid #bbdefb;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.encabezado-medida {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #0d47a1;
+}
+
+.encabezado-medida strong {
+    font-size: 18px;
+}
+
+.pills-medida {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.btn-medida-gramo,
+.btn-medida-ml {
+    padding: 8px 4px;
+    border: 1px solid #90caf9;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: center;
+    min-height: 38px;
+}
+
+.btn-medida-gramo.activa,
+.btn-medida-ml.activa {
+    background: #1976d2;
+    color: #ffffff;
+    border-color: #1976d2;
+    font-weight: bold;
+}
+
+.selector-modo-peso {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.btn-tab-modo {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #90caf9;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    min-height: 38px;
+}
+
+.btn-tab-modo.activa {
+    background: #0d47a1;
+    color: #ffffff;
+    border-color: #0d47a1;
+    font-weight: bold;
+}
+
+.campo-custom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.campo-custom input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* MODALES */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 12px;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.modal-contenido {
+    background: #ffffff;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-ancho {
+    max-width: 650px;
+}
+
+.modal-header {
+    padding: 14px 16px;
+    background: #faf8f6;
+    border-bottom: 1px solid #eee7e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    color: #5b1717;
+}
+
+.btn-cerrar-modal {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+    padding: 4px 8px;
+}
+
+.modal-body {
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.modal-label {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.campo-comentario {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+}
+
+.campo-comentario label {
+    font-size: 12px;
+    color: #666;
+}
+
+.campo-comentario input,
+.input-monto {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.control-cantidad-modal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.counter-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-counter {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-footer {
+    padding: 12px 16px;
+    background: #faf8f6;
+    border-top: 1px solid #eee7e1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* MESAS Y TICKETS ABIERTOS */
+.grid-mesas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.btn-mesa-item {
+    padding: 14px 8px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    min-height: 50px;
+}
+
+.btn-mesa-item.ocupada,
+.btn-mesa-item:disabled {
+    background: #ffebee !important;
+    border-color: #ef9a9a !important;
+    color: #c62828 !important;
+    opacity: 0.65 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+.lista-tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.card-ticket-abierto {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card-ticket-abierto h4 {
+    color: #5b1717;
+    font-size: 15px;
+}
+
+.card-ticket-abierto .monto {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.acciones-card-ticket {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.btn-mini {
+    padding: 8px 2px;
+    font-size: 11px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    min-height: 36px;
+    text-align: center;
+}
+
+.btn-mini-cargar {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.btn-mini-cuenta {
+    background: #fff8e1;
+    color: #f57f17;
+}
+
+.btn-mini-cobrar {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* RECIBO DE IMPRESIÓN */
+.ticket-impresion {
+    font-family: 'Courier New', Courier, monospace;
+    background: #fff8dc;
+    padding: 16px;
+    border: 1px dashed #bbb;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #000;
+}
+
+.ticket-impresion .encabezado-recibo {
+    text-align: center;
+    border-bottom: 1px dashed #333;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.ticket-impresion .encabezado-recibo h2 {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.ticket-impresion .item-recibo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.ticket-impresion .item-recibo-sub {
+    font-size: 10px;
+    color: #555;
+    margin-bottom: 4px;
+    padding-left: 10px;
+}
+
+.ticket-impresion .totales-recibo {
+    border-top: 1px dashed #333;
+    margin-top: 10px;
+    padding-top: 8px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* COBRO */
+.monto-cobro-box {
+    text-align: center;
+    background: #fdf5f5;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.monto-cobro-box strong {
+    font-size: 32px;
+    color: #5b1717;
+    display: block;
+}
+
+.tipo-pago-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.tab-pago {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    min-height: 44px;
+}
+
+.tab-pago.activa {
+    background: #5b1717;
+    color: #fff;
+    border-color: #5b1717;
+    font-weight: bold;
+}
+
+.billetes-rapidos {
+    display: flex;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+.btn-billete {
+    flex: 1;
+    padding: 10px 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    min-height: 44px;
+}
+
+.alerta-error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-top: 8px;
+    border: 1px solid #ef9a9a;
+}
+
+.resultado-cambio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e8f5e9;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.resultado-cambio strong {
+    font-size: 22px;
+    color: #2e7d32;
+}
+
+.separador {
+    text-align: center;
+    margin: 10px 0;
+    color: #aaa;
+    font-size: 12px;
+}
+
+@media (max-width: 850px) {
+    .pos-layout {
+        flex-direction: column;
+    }
+
+    .seccion-ticket {
+        width: 100%;
+        height: 45vh;
+        border-left: none;
+        border-top: 2px solid #e3dbd4;
+    }
+
+    .seccion-productos {
+        height: 55vh;
+    }
+
+    .grid-productos {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
