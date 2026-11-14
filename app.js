@@ -162,6 +162,7 @@ function iniciarSesion(nombreUsuario) {
     } else {
         btnCobrarDirecto.classList.remove("oculto");
     }
+    actualizarTicketVista();
 }
 
 btnCerrarSesion.addEventListener("click", () => {
@@ -439,6 +440,7 @@ document.getElementById("btn-confirmar-agregar").addEventListener("click", () =>
 /* RENDERIZAR TICKET ACTUAL */
 function actualizarTicketVista() {
     listaTicket.innerHTML = "";
+    const esMesero = usuarioActivo && usuarioActivo.startsWith("Mesero");
 
     if (ordenActual.length === 0) {
         listaTicket.innerHTML = `
@@ -451,7 +453,21 @@ function actualizarTicketVista() {
         totalOrdenElem.textContent = "$0.00";
         btnGuardarOrden.disabled = true;
         btnCobrarDirecto.disabled = true;
+        btnLimpiarTicket.disabled = true;
+        btnLimpiarTicket.style.opacity = "0.3";
         return;
+    }
+
+    // SI LA ORDEN AÚN NO SE HA GUARDADO (ticketEditandoId === null), EL MESERO PUEDE USAR EL BOTÓN DE LIMPIAR
+    // SI YA ESTÁ GUARDADA Y SE ESTÁ EDITANDO, SE BLOQUEA PARA EL MESERO
+    if (esMesero && ticketEditandoId !== null) {
+        btnLimpiarTicket.disabled = true;
+        btnLimpiarTicket.style.opacity = "0.3";
+        btnLimpiarTicket.style.cursor = "not-allowed";
+    } else {
+        btnLimpiarTicket.disabled = false;
+        btnLimpiarTicket.style.opacity = "1";
+        btnLimpiarTicket.style.cursor = "pointer";
     }
 
     let total = 0;
@@ -470,10 +486,7 @@ function actualizarTicketVista() {
             detalleTexto = `${item.cantidad}x $${item.precioUnitario.toFixed(2)}`;
         }
 
-        // REGLA DE ELIMINACIÓN:
-        // El Master siempre puede eliminar.
-        // El Mesero SOLO puede eliminar si el ticket NO ha sido guardado todavía (es una orden nueva en proceso).
-        const esMesero = usuarioActivo && usuarioActivo.startsWith("Mesero");
+        // EL MESERO PUEDE ELIMINAR CUALQUIER ITEM SI EL TICKET AÚN NO SE HA GUARDADO (ticketEditandoId === null)
         const puedeEliminar = !esMesero || (esMesero && ticketEditandoId === null);
 
         div.innerHTML = `
@@ -493,7 +506,7 @@ function actualizarTicketVista() {
 
     totalOrdenElem.textContent = `$${total.toFixed(2)}`;
     btnGuardarOrden.disabled = false;
-    if (!usuarioActivo || !usuarioActivo.startsWith("Mesero")) {
+    if (!esMesero) {
         btnCobrarDirecto.disabled = false;
     }
     actualizarBadgeTickets();
@@ -838,7 +851,14 @@ document.querySelectorAll(".btn-cerrar-modal").forEach(b => {
     b.addEventListener("click", cerrarTodosModales);
 });
 
-btnLimpiarTicket.addEventListener("click", limpiarOrdenActual);
+btnLimpiarTicket.addEventListener("click", () => {
+    const esMesero = usuarioActivo && usuarioActivo.startsWith("Mesero");
+    if (esMesero && ticketEditandoId !== null) {
+        alert("⛔ No puedes vaciar la orden de un ticket que ya fue guardado. Solicita autorización a caja (Master).");
+        return;
+    }
+    limpiarOrdenActual();
+});
 
 // INICIALIZACIÓN
 if (verificarLicenciaTerminal()) {
